@@ -1,0 +1,72 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+    standard:
+        format: "[%(asctime)s] [%(levelname)s] [%(name)s]: %(message)s"
+        datefmt: "%Y-%m-%dT%H:%M:%S%z"
+    simple:
+        format: "[%(asctime)s] [%(levelname)s]: %(message)s"
+        datefmt: "%Y-%m-%dT%H:%M:%S%z"
+    error:
+        format: "[%(asctime)s] [%(levelname)s] [%(name)s]: %(message)s"
+        datefmt: "%Y-%m-%dT%H:%M:%S%z"
+
+handlers:
+    # consoles
+    standard-console:
+        class: logging.StreamHandler
+        level: DEBUG
+        formatter: standard
+        stream: ext://sys.stdout
+    simple-console:
+        class: logging.StreamHandler
+        level: DEBUG
+        formatter: simple
+        stream: ext://sys.stdout
+    # files
+    standard-file:
+        class: logging.handlers.TimedRotatingFileHandler
+        level: DEBUG
+        formatter: standard
+        filename: /tmp/debug.log
+        when: midnight
+        interval: 1
+        backupCount: 7
+        encoding: utf8
+    simple-file:
+        class: logging.handlers.TimedRotatingFileHandler
+        level: DEBUG
+        formatter: simple
+        filename: /tmp/info.log
+        when: midnight
+        interval: 1
+        backupCount: 7
+        encoding: utf8
+
+root:
+    level: DEBUG
+    handlers: [standard-console, standard-file]
+    propagate: yes
+
+loggers:
+    fastapi:
+        level: DEBUG
+        handlers: [standard-console, standard-file]
+        propagate: no
+    gunicorn:
+        level: DEBUG
+        handlers: [standard-console, standard-file]
+        propagate: no
+    uvicorn:
+        level: DEBUG
+        handlers: [standard-console, standard-file]
+        propagate: no
+    sqlalchemy:
+        level: DEBUG
+        handlers: [standard-console, standard-file]
+        propagate: no
+    sqlite3:
+        level: DEBUG
+        handlers: [standard-console, standard-file]
+        propagate: no
